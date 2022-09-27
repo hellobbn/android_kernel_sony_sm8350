@@ -153,11 +153,18 @@ static int cam_ife_csid_get_format_rdi(
 	case CAM_FORMAT_MIPI_RAW_12:
 		switch (out_format) {
 		case CAM_FORMAT_MIPI_RAW_12:
+/* sony extension begin */
+		case CAM_FORMAT_PLAIN128:
+/* sony extension end */
 			*decode_fmt = 0xf;
+/* sony extension begin */
+#if 0
 			if (rpp) {
 				*decode_fmt = 0x3;
 				*packing_fmt = 0x1;
 			}
+#endif
+/* sony extension end */
 			break;
 		case CAM_FORMAT_PLAIN16_12:
 			*decode_fmt = 0x3;
@@ -4213,8 +4220,14 @@ static int cam_ife_csid_sof_irq_debug(
 	}
 
 	if (csid_reg->ipp_reg) {
-		val = cam_io_r_mb(soc_info->reg_map[0].mem_base +
-			csid_reg->ipp_reg->csid_pxl_irq_mask_addr);
+/* sony extension begin */
+		if (csid_reg->cmn_reg->num_pix) {
+/* sony extension end */
+			val = cam_io_r_mb(soc_info->reg_map[0].mem_base +
+				csid_reg->ipp_reg->csid_pxl_irq_mask_addr);
+/* sony extension begin */
+		}
+/* sony extension end */
 
 		if (val) {
 			if (sof_irq_enable)

@@ -40,7 +40,13 @@
 #define CYCLES_PER_MICRO_SEC_DEFAULT 4915
 #define CCI_MAX_DELAY 1000000
 
+/* sony extension begin */
+#if 1
+#define CCI_TIMEOUT msecs_to_jiffies(50)
+#else
 #define CCI_TIMEOUT msecs_to_jiffies(1500)
+#endif
+/* sony extension end */
 #define NUM_QUEUES 2
 
 #define MSM_CCI_WRITE_DATA_PAYLOAD_SIZE_11 11

@@ -2436,6 +2436,8 @@ int cam_req_mgr_process_flush_req(void *priv, void *data)
 			CAM_DBG(CAM_CRM, "req_id %lld found at idx %d",
 				flush_info->req_id, idx);
 			slot = &in_q->slot[idx];
+/* sony extension start */
+#if 0
 			if (slot->status == CRM_SLOT_STATUS_REQ_PENDING ||
 				slot->status == CRM_SLOT_STATUS_REQ_APPLIED) {
 				CAM_WARN(CAM_CRM,
@@ -2444,6 +2446,8 @@ int cam_req_mgr_process_flush_req(void *priv, void *data)
 				mutex_unlock(&link->req.lock);
 				return -EINVAL;
 			}
+#endif
+/* sony extension end */
 			slot->additional_timeout = 0;
 			__cam_req_mgr_in_q_skip_idx(in_q, idx);
 		}
