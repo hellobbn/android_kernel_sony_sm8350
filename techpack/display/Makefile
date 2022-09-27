@@ -50,6 +50,14 @@ ifeq ($(CONFIG_ARCH_BENGAL), y)
 LINUXINCLUDE    += -include $(srctree)/techpack/display/config/bengaldispconf.h
 endif
 
+ifeq ($(CONFIG_ARCH_SONY_SAGAMI), y)
+	include $(srctree)/techpack/display/config/sagamidisp.conf
+endif
+
+ifeq ($(CONFIG_ARCH_SONY_SAGAMI), y)
+	LINUXINCLUDE    += -include $(srctree)/techpack/display/config/sagamidispconf.h
+endif
+
 ifeq ($(CONFIG_ARCH_MONACO), y)
 include $(srctree)/techpack/display/config/monacodisp.conf
 endif

@@ -81,6 +81,11 @@ struct dp_hpd {
 	bool multi_func;
 	bool peer_usb_comm;
 	bool force_multi_func;
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	u16 vid;
+	u16 pid;
+	u16 svid;
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 	void (*isr)(struct dp_hpd *dp_hpd);
 	int (*register_hpd)(struct dp_hpd *dp_hpd);

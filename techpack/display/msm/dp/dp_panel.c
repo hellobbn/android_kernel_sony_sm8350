@@ -1571,6 +1571,12 @@ skip_dpcd_read:
 
 	DP_DEBUG("version:%d.%d, rate:%d, lanes:%d\n", panel->major,
 		panel->minor, link_info->rate, link_info->num_lanes);
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	if (drm_dp_link_rate_to_bw_code(link_info->rate) > DP_LINK_BW_5_4) {
+		link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
+		DP_DEBUG("override link rate:%d\n", link_info->rate);
+	}
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 	if (drm_dp_enhanced_frame_cap(dpcd))
 		link_info->capabilities |= DP_LINK_CAP_ENHANCED_FRAMING;

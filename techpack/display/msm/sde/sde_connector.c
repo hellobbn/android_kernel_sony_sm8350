@@ -19,6 +19,7 @@
 #include "sde_rm.h"
 #include "sde_vm.h"
 #include <drm/drm_probe_helper.h>
+#include <linux/list_sort.h>
 
 #define BL_NODE_NAME_SIZE 32
 #define HDR10_PLUS_VSIF_TYPE_CODE      0x81
@@ -2249,6 +2250,28 @@ static void sde_connector_early_unregister(struct drm_connector *connector)
 	/* debugfs under connector->debugfs are deleted by drm_debugfs */
 }
 
+static int sde_drm_mode_somc_compare(void *priv, struct list_head *lh_a, struct list_head *lh_b)
+{
+	struct drm_display_mode *a = list_entry(lh_a, struct drm_display_mode, head);
+	struct drm_display_mode *b = list_entry(lh_b, struct drm_display_mode, head);
+	int diff;
+
+	diff = ((b->type & DRM_MODE_TYPE_PREFERRED) != 0) -
+		((a->type & DRM_MODE_TYPE_PREFERRED) != 0);
+	if (diff)
+		return diff;
+	diff = b->hdisplay * b->vdisplay - a->hdisplay * a->vdisplay;
+	if (diff)
+		return -diff;
+
+	diff = drm_mode_vrefresh(b) - drm_mode_vrefresh(a);
+	if (diff)
+		return -diff;
+
+	diff = b->clock - a->clock;
+	return diff;
+}
+
 static int sde_connector_fill_modes(struct drm_connector *connector,
 		uint32_t max_width, uint32_t max_height)
 {
@@ -2263,6 +2286,9 @@ static int sde_connector_fill_modes(struct drm_connector *connector,
 
 	mode_count = drm_helper_probe_single_connector_modes(connector,
 			max_width, max_height);
+
+	if (connector->connector_type == DRM_MODE_CONNECTOR_DSI)
+		list_sort(NULL, &connector->modes, sde_drm_mode_somc_compare);
 
 	if (sde_conn->ops.set_allowed_mode_switch)
 		sde_conn->ops.set_allowed_mode_switch(connector,

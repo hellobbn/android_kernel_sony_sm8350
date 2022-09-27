@@ -121,6 +121,17 @@ static int dp_altmode_notify(void *priv, void *data, size_t len)
 	orientation = payload[1];
 	dp_data = payload[8];
 
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	/* Parse VID/SVID/PID */
+	altmode->dp_altmode.base.vid = (payload[5] << 8) + payload[4];
+	altmode->dp_altmode.base.svid = (payload[7] << 8) + payload[6];
+	altmode->dp_altmode.base.pid = (payload[17] << 8) + payload[16];
+	DP_INFO("dp_altmode VID=0x%04x, PID=0x%04x, SVID=0x%04x\n",
+		altmode->dp_altmode.base.vid,
+		altmode->dp_altmode.base.pid,
+		altmode->dp_altmode.base.svid);
+
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 	pin = dp_data & ALTMODE_CONFIGURE_MASK;
 	hpd_state = (dp_data & ALTMODE_HPD_STATE_MASK) >> 6;
 	hpd_irq = (dp_data & ALTMODE_HPD_IRQ_MASK) >> 7;

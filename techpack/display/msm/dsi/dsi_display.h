@@ -628,7 +628,7 @@ int dsi_pre_clkon_cb(void *priv, enum dsi_clk_type clk_type,
  * Return: error code.
  */
 int dsi_display_unprepare(struct dsi_display *display);
-int dsi_display_set_ulp_load(struct dsi_display *display, bool enable);
+
 int dsi_display_set_tpg_state(struct dsi_display *display, bool enable);
 
 int dsi_display_clock_gate(struct dsi_display *display, bool enable);
@@ -798,5 +798,9 @@ int dsi_display_dump_clks_state(struct dsi_display *display);
  * @display:         Handle to display
  */
 void dsi_display_dfps_update_parent(struct dsi_display *display);
+
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+struct dsi_display *dsi_display_get_main_display(void);
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 #endif /* _DSI_DISPLAY_H_ */
