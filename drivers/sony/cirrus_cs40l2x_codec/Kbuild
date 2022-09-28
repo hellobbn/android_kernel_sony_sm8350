@@ -1,0 +1,7 @@
+# add -Wall to try to catch everything we can.
+EXTRA_CFLAGS += -Wall
+
+cirrus_cs40l2x_codec-objs = cs40l2x.o
+obj-m += cirrus_cs40l2x_codec.o
+ccflags-y := -I $(LOCAL_DIR)/../../../include
+ccflags-y += -I $(src)/../../../include

@@ -1,0 +1,1 @@
+../../../drivers/power/supply/qcom/pmic-voter.c
