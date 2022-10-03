@@ -4410,7 +4410,7 @@
 			interrupt-parent = <&ipcc_mproc>;
 			interrupts = <IPCC_CLIENT_SPSS
 				      IPCC_MPROC_SIGNAL_GLINK_QMP
-				      IRQ_TYPE_EDGE_RISING>;
+				      IRQ_TYPE_LEVEL_HIGH>;
 
 			reg = <0x1885008 0x8>,
 			      <0x1885010 0x4>;
@@ -4687,6 +4687,7 @@
 		qcom,use-64-bit-dma-mask;
 		qcom,ipa-endp-delay-wa;
 		qcom,lan-rx-napi;
+		qcom,lan-rx-ring-size = <224>;
 		qcom,tx-napi;
 		qcom,wan-use-skb-page;
 		qcom,rmnet-ctl-enable;
@@ -4698,6 +4699,7 @@
 		qcom,ipa-holb-monitor-max-cnt-11ad = <10>;
 		qcom,tx-wrapper-cache-max-size = <400>;
 		qcom,ipa-gpi-event-rp-ddr;
+		qcom,register-collection-on-crash;
 		clock-names = "core_clk";
 		clocks = <&clock_rpmh RPMH_IPA_CLK>;
 		qcom,interconnect,num-cases = <5>;
@@ -4729,7 +4731,7 @@
 		qcom,bus-vector-names = "MIN", "SVS2", "SVS", "NOMINAL",
 			"TURBO";
 		qcom,throughput-threshold = <600 2500 5000>;
-		qcom,scaling-exceptions = <>;
+		qcom,scaling-exceptions = "wdi", "100", "600", "1200";
 
 		/* smp2p information */
 		qcom,smp2p_map_ipa_1_out {
@@ -5292,6 +5294,9 @@
 		qcom,spcom-soc2sp-rmb-sp-ssr-bit = <0>;
 		qcom,boot-enabled;
 		status = "ok";
+
+		vreg_sp-supply = <&spss_vreg>;
+		gpio_sp-supply = <&spss_gpio_vreg>;
 	};
 
 	spss_utils: qcom,spss_utils {
@@ -5417,6 +5422,7 @@
 		reg-names = "smmu_iova_ipa", "tcs_cmd";
 		wlan-en-gpio = <&tlmm 64 0>;
 		qcom,bt-en-gpio = <&tlmm 65 0>;
+		qcom,sw-ctrl-gpio = <&tlmm 153 0>;
 		pinctrl-names = "wlan_en_active", "wlan_en_sleep";
 		pinctrl-0 = <&cnss_wlan_en_active>;
 		pinctrl-1 = <&cnss_wlan_en_sleep>;
@@ -5427,6 +5433,7 @@
 		qcom,tcs_offset_int_pow_amp_vreg = <0x4D0>;
 		use-pm-domain;
 		cnss-enable-self-recovery;
+		qcom,same-dt-multi-dev;
 
 		vdd-wlan-aon-supply = <&S2E>;
 		qcom,vdd-wlan-aon-config = <950000 952000 0 0 1>;

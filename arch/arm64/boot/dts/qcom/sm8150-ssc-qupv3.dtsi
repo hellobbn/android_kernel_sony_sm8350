@@ -10,6 +10,7 @@
 		qcom,msm-bus,vectors-bus-ids =
 			<MASTER_SENSORS_AHB SLAVE_EBI1>;
 		iommus = <&apps_smmu 0x4e3 0x0>;
+		qcom,iommu-dma-addr-pool = <0x40000000 0xc0000000>;
 		qcom,iommu-dma = "fastmap";
 		status = "disabled";
 	};
@@ -29,6 +30,7 @@
 		pinctrl-0 = <&qupv3_se20_i2c_active>;
 		pinctrl-1 = <&qupv3_se20_i2c_sleep>;
 		qcom,wrapper-core = <&qupv3_3>;
+		qcom,disable-dma;
 		status = "disabled";
 	};
 
@@ -46,6 +48,7 @@
 		pinctrl-0 = <&qupv3_se21_i2c_active>;
 		pinctrl-1 = <&qupv3_se21_i2c_sleep>;
 		qcom,wrapper-core = <&qupv3_3>;
+		qcom,disable-dma;
 		status = "disabled";
 	};
 
@@ -63,6 +66,7 @@
 		pinctrl-0 = <&qupv3_se22_i2c_active>;
 		pinctrl-1 = <&qupv3_se22_i2c_sleep>;
 		qcom,wrapper-core = <&qupv3_3>;
+		qcom,disable-dma;
 		status = "disabled";
 	};
 

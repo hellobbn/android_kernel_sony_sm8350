@@ -9,6 +9,7 @@ dtbo-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi-overlay.dtbo \
 	lahaina-atp-overlay.dtbo \
 	lahaina-hdk-overlay.dtbo \
 	lahaina-hhg-overlay.dtbo \
+	lahainap-hhg-hsp-pro-overlay.dtbo \
 	lahaina-qrd-hsp-overlay.dtbo \
 	lahaina-qrd-module-overlay.dtbo \
 	lahainap-mtp-overlay.dtbo \
@@ -29,6 +30,7 @@ lahaina-cdp-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-atp-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-hdk-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-hhg-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
+lahainap-hhg-hsp-pro-overlay.dtbo-base := lahainap.dtb lahainap-v2.dtb lahainap-v2.1.dtb
 lahaina-qrd-hsp-overlay.dtbo-base := lahaina.dtb
 lahaina-qrd-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
 lahaina-qrd-module-overlay.dtbo-base := lahaina.dtb lahaina-v2.dtb lahaina-v2.1.dtb
@@ -78,6 +80,7 @@ dtb-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi.dtb \
 	lahaina-v2.1-atp.dtb \
 	lahaina-v2.1-hdk.dtb \
 	lahaina-v2.1-hhg.dtb \
+	lahainap-v2.1-hhg-hsp-pro.dtb \
 	lahaina-v2.1-qrd.dtb \
 	lahaina-v2.1-qrd-module.dtb \
 	lahainap-v2.1-mtp.dtb \
@@ -90,9 +93,99 @@ dtb-$(CONFIG_ARCH_LAHAINA) += lahaina-rumi.dtb \
 	lahaina-v2.1-cdp-hsp-pro.dts \
 	lahaina-v2.1-qrd-hsp-pro.dts
 endif
-endif
+
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+dtbo-$(CONFIG_ARCH_HOLI) += holi-rumi-overlay.dtbo \
+	holi-mtp-overlay.dtbo \
+	holi-cdp-overlay.dtbo \
+	holi-cdp-lcd-overlay.dtbo \
+	holi-qrd-overlay.dtbo \
+	holi-atp-overlay.dtbo \
+	holi-mtp-usbc-overlay.dtbo \
+	holi-mtp-pm6125-overlay.dtbo \
+	holi-cdp-pm6125-overlay.dtbo \
+	holi-cdp-lcd-pm6125-overlay.dtbo \
+	holi-mtp-usbc-pm6125-overlay.dtbo \
+	holi-mtp-pm6125-nopmi-overlay.dtbo \
+	holi-qrd-pm6125-overlay.dtbo \
+	holi-qrd-pm6125-nopmi-overlay.dtbo
+
+holi-rumi-overlay.dtbo-base := holi.dtb
+holi-mtp-overlay.dtbo-base := holi.dtb
+holi-cdp-overlay.dtbo-base := holi.dtb
+holi-cdp-lcd-overlay.dtbo-base := holi.dtb
+holi-qrd-overlay.dtbo-base := holi.dtb
+holi-atp-overlay.dtbo-base := holi.dtb
+holi-mtp-usbc-overlay.dtbo-base := holi.dtb
+holi-mtp-pm6125-overlay.dtbo-base := holi.dtb
+holi-cdp-pm6125-overlay.dtbo-base := holi.dtb
+holi-cdp-lcd-pm6125-overlay.dtbo-base := holi.dtb
+holi-mtp-usbc-pm6125-overlay.dtbo-base := holi.dtb
+holi-mtp-pm6125-nopmi-overlay.dtbo-base := holi.dtb
+holi-qrd-pm6125-overlay.dtbo-base := holi.dtb
+holi-qrd-pm6125-nopmi-overlay.dtbo-base := holi.dtb
+
+else
+dtb-$(CONFIG_ARCH_HOLI) += holi-rumi.dtb \
+	holi-mtp.dtb \
+	holi-cdp.dtb \
+	holi-cdp-lcd.dtb \
+	holi-qrd.dtb \
+	holi-atp.dtb \
+	holi-mtp-usbc.dtb\
+	holi-mtp-pm6125.dtb \
+	holi-cdp-pm6125.dtb \
+	holi-cdp-lcd-pm6125.dtb \
+	holi-mtp-usbc-pm6125.dtb \
+	holi-mtp-pm6125-nopmi.dtb \
+	holi-qrd-pm6125.dtb \
+	holi-qrd-pm6125-nopmi.dtb
+
 endif
 
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+dtbo-$(CONFIG_ARCH_BLAIR) += blair-rumi-overlay.dtbo \
+	blair-mtp-overlay.dtbo \
+	blair-cdp-overlay.dtbo \
+	blair-atp-overlay.dtbo \
+	blair-qrd-overlay.dtbo \
+	blair-mtp-usbc-overlay.dtbo \
+	blair-mtp-nopmi-overlay.dtbo \
+	blair-qrd-nopmi-overlay.dtbo
+
+blair-rumi-overlay.dtbo-base := blair.dtb
+blair-mtp-overlay.dtbo-base := blair.dtb
+blair-cdp-overlay.dtbo-base := blair.dtb
+blair-atp-overlay.dtbo-base := blair.dtb
+blair-qrd-overlay.dtbo-base := blair.dtb
+blair-mtp-usbc-overlay.dtbo-base := blair.dtb
+blair-mtp-nopmi-overlay.dtbo-base := blair.dtb
+blair-qrd-nopmi-overlay.dtbo-base := blair.dtb
+else
+dtb-$(CONFIG_ARCH_BLAIR) += blair-rumi.dtb \
+	blair-mtp.dtb \
+	blair-cdp.dtb \
+	blair-atp.dtb \
+	blair-qrd.dtb \
+	blair-mtp-usbc.dtb \
+	blair-mtp-nopmi.dtb \
+	blair-qrd-nopmi.dtb
+endif
+
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+
+ifeq ($(CONFIG_ARCH_LAHAINA), y)
+ifeq ($(CONFIG_ARCH_QTI_VM), y)
+dtb-$(CONFIG_ARCH_QTI_VM) += lahaina-vm-mtp.dtb \
+	lahaina-vm-cdp.dtb \
+	lahaina-vm-qrd.dtb \
+	lahaina-vm-mtp-v2.dtb \
+	lahaina-vm-mtp-v2.1.dtb
+endif
+endif
+endif
+endif
+endif
 
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)

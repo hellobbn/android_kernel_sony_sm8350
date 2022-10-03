@@ -12,10 +12,12 @@
 			<0x60001000 0x1000>,
 			<0x60100000 0x100000>,
 			<0x60200000 0x100000>,
-			<0x60300000 0x3d00000>;
+			<0x60300000 0x3d00000>,
+			<0x01c06000 0x1000>;
 
 		reg-names = "parf", "phy", "dm_core", "elbi",
-				"iatu", "conf", "io", "bars";
+				"iatu", "conf", "io", "bars",
+				"mhi";
 
 		#address-cells = <3>;
 		#size-cells = <2>;
@@ -174,7 +176,7 @@
 		linux,pci-domain = <0>;
 
 		qcom,pcie-phy-ver = <0x40>;
-		qcom,use-19p2mhz-aux-clk;
+		qcom,aux-clk-freq = <20>; /* 19.2 MHz */
 
 		qcom,smmu-sid-base = <0x1d80>;
 
@@ -282,10 +284,12 @@
 			<0x40001000 0x1000>,
 			<0x40100000 0x100000>,
 			<0x40200000 0x100000>,
-			<0x40300000 0x1fd00000>;
+			<0x40300000 0x1fd00000>,
+			<0x01c0e000 0x1000>;
 
 		reg-names = "parf", "phy", "dm_core", "elbi",
-				"iatu", "conf", "io", "bars";
+				"iatu", "conf", "io", "bars",
+				"mhi";
 
 		#address-cells = <3>;
 		#size-cells = <2>;
@@ -494,7 +498,7 @@
 		linux,pci-domain = <1>;
 
 		qcom,pcie-phy-ver = <0x40>;
-		qcom,use-19p2mhz-aux-clk;
+		qcom,aux-clk-freq = <20>; /* 19.2 MHz */
 
 		qcom,smmu-sid-base = <0x1e00>;
 
