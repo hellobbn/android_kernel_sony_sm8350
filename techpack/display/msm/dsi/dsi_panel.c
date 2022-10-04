@@ -2577,7 +2577,7 @@ static int dsi_panel_parse_bl_config(struct dsi_panel *panel)
 		panel->bl_config.bl_min_level = val;
 	}
 
-	rc = utils->read_u32(utils->data, "qcom,mdss-dsi-bl-max-level", &val);
+	rc = utils->read_u32(utils->data, "somc,brightness-max-level", &val);
 	if (rc) {
 		DSI_DEBUG("[%s] bl-max-level unspecified, defaulting to max level\n",
 			 panel->name);
