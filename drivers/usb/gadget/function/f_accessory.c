@@ -1105,12 +1105,6 @@ __acc_function_bind(struct usb_configuration *c,
 	acc_superspeed_out_desc.bEndpointAddress =
 		acc_fullspeed_out_desc.bEndpointAddress;
 
-	/* support super speed plus hardware */
-	acc_superspeedplus_in_desc.bEndpointAddress =
-		acc_fullspeed_in_desc.bEndpointAddress;
-	acc_superspeedplus_out_desc.bEndpointAddress =
-		acc_fullspeed_out_desc.bEndpointAddress;
-
 	/* support super speed hardware */
 	if (gadget_is_superspeed(c->cdev->gadget)) {
 		acc_superspeed_in_desc.bEndpointAddress =

@@ -2756,11 +2756,8 @@ static void msm_pcm_routing_process_audio(u16 reg, u16 val, int set)
 	uint32_t passthr_mode;
 	bool is_lsm;
 	uint32_t copp_token = 0;
-<<<<<<< HEAD
 	bool is_copp_24bit = false;
-=======
 	int copp_perf_mode = 0;
->>>>>>> edc845c4d2bd140554d9c03d24504c25f3ef6cd2
 
 	pr_debug("%s: reg %x val %x set %x\n", __func__, reg, val, set);
 
