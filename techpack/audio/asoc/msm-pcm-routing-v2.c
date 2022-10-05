@@ -1722,10 +1722,13 @@ done:
 EXPORT_SYMBOL(msm_pcm_routing_get_stream_app_type_cfg);
 
 static struct cal_block_data *msm_routing_find_topology_by_path(int path,
-								int cal_index)
+								int cal_index,
+								int app_type,
+								int acdb_id)
 {
 	struct list_head		*ptr, *next;
 	struct cal_block_data		*cal_block = NULL;
+	struct audio_cal_info_adm_top *cal_info;
 	pr_debug("%s\n", __func__);
 
 	list_for_each_safe(ptr, next,
@@ -1736,9 +1739,11 @@ static struct cal_block_data *msm_routing_find_topology_by_path(int path,
 
 		if (cal_utils_is_cal_stale(cal_block))
 			continue;
-
-		if (((struct audio_cal_info_adm_top *)cal_block
-			->cal_info)->path == path) {
+		cal_info = (struct audio_cal_info_adm_top *)
+                      	 	 cal_block->cal_info;
+		if ((cal_info->path == path)  &&
+			(cal_info->app_type == app_type) &&
+			(cal_info->acdb_id == acdb_id)) {
 			return cal_block;
 		}
 	}
@@ -1779,7 +1784,9 @@ static struct cal_block_data *msm_routing_find_topology(int path,
 		 "acdb_id %d %s\n",  __func__, path, app_type, acdb_id,
 		 exact ? "fail" : "defaulting to search by path");
 	return exact ? NULL : msm_routing_find_topology_by_path(path,
-								cal_index);
+								cal_index,
+								app_type,
+								acdb_id);
 }
 
 static struct cal_block_data *msm_routing_find_topology_by_buf_number(int usecase, int path,
@@ -3067,6 +3074,11 @@ static void msm_pcm_routing_process_voice(u16 reg, u16 val, int set)
 
 	pr_debug("%s: FE DAI 0x%x session_id 0x%x\n",
 		__func__, val, session_id);
+
+	if (!session_id) {
+		pr_err("%s: Invalid session_id %x\n", __func__, session_id);
+		return;
+	}
 
 	mutex_lock(&routing_lock);
 
