@@ -248,8 +248,9 @@ static int tipc_enable_bearer(struct net *net, const char *name,
 	u32 i;
 
 	if (!bearer_name_validate(name, &b_names)) {
+		errstr = "illegal name";
 		NL_SET_ERR_MSG(extack, "Illegal name");
-		return res;
+		goto rejected;
 	}
 
 	if (prio > TIPC_MAX_LINK_PRI && prio != TIPC_MEDIA_LINK_PRI) {

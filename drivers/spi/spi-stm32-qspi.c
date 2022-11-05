@@ -293,8 +293,7 @@ static int stm32_qspi_wait_cmd(struct stm32_qspi *qspi,
 	if (!op->data.nbytes)
 		goto wait_nobusy;
 
-	if ((readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF) ||
-	    qspi->fmode == CCR_FMODE_APM)
+	if (readl_relaxed(qspi->io_base + QSPI_SR) & SR_TCF)
 		goto out;
 
 	reinit_completion(&qspi->data_completion);

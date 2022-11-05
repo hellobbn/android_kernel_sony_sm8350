@@ -63,8 +63,8 @@
 			  "GPIO43",
 			  "GPIO44",
 			  "GPIO45",
-			  "SMPS_SCL",
-			  "SMPS_SDA",
+			  "GPIO46",
+			  "GPIO47",
 			  /* Used by eMMC */
 			  "SD_CLK_R",
 			  "SD_CMD_R",

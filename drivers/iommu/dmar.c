@@ -363,7 +363,7 @@ static int dmar_pci_bus_notifier(struct notifier_block *nb,
 
 static struct notifier_block dmar_pci_bus_nb = {
 	.notifier_call = dmar_pci_bus_notifier,
-	.priority = 1,
+	.priority = INT_MIN,
 };
 
 static struct dmar_drhd_unit *

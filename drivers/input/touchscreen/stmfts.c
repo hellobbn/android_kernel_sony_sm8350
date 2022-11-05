@@ -337,15 +337,13 @@ static int stmfts_input_open(struct input_dev *dev)
 	struct stmfts_data *sdata = input_get_drvdata(dev);
 	int err;
 
-	err = pm_runtime_resume_and_get(&sdata->client->dev);
-	if (err)
-		return err;
+	err = pm_runtime_get_sync(&sdata->client->dev);
+	if (err < 0)
+		goto out;
 
 	err = i2c_smbus_write_byte(sdata->client, STMFTS_MS_MT_SENSE_ON);
-	if (err) {
-		pm_runtime_put_sync(&sdata->client->dev);
-		return err;
-	}
+	if (err)
+		goto out;
 
 	mutex_lock(&sdata->mutex);
 	sdata->running = true;
@@ -368,7 +366,9 @@ static int stmfts_input_open(struct input_dev *dev)
 				 "failed to enable touchkey\n");
 	}
 
-	return 0;
+out:
+	pm_runtime_put_noidle(&sdata->client->dev);
+	return err;
 }
 
 static void stmfts_input_close(struct input_dev *dev)
