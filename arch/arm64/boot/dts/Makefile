@@ -1,4 +1,9 @@
 # SPDX-License-Identifier: GPL-2.0
+dtstree	:= $(srctree)/$(src)
+vendor  := $(dtstree)/vendor
+ifneq "$(wildcard $(vendor)/Makefile)" ""
+    subdir-y += vendor
+else
 subdir-y += actions
 subdir-y += al
 subdir-y += allwinner
@@ -29,9 +34,4 @@ subdir-y += synaptics
 subdir-y += ti
 subdir-y += xilinx
 subdir-y += zte
-
-dtstree	:= $(srctree)/$(src)
-vendor  := $(dtstree)/vendor
-ifneq "$(wildcard $(vendor)/Makefile)" ""
-    subdir-y += vendor
 endif
