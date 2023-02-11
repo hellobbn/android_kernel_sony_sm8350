@@ -2469,8 +2469,8 @@ int msm_pcm_routing_reg_phy_stream(int fedai_id, int perf_mode,
 	uint32_t passthr_mode = LEGACY_PCM;
 	int ret = 0;
 	uint32_t copp_token = 0;
-	bool is_copp_24bit = false;
 	int copp_perf_mode = 0;
+	bool is_copp_24bit = false;
 
 	if (fedai_id >= MSM_FRONTEND_DAI_MM_MAX_ID) {
 		/* bad ID assigned in machine driver */
@@ -2756,8 +2756,8 @@ static void msm_pcm_routing_process_audio(u16 reg, u16 val, int set)
 	uint32_t passthr_mode;
 	bool is_lsm;
 	uint32_t copp_token = 0;
-	bool is_copp_24bit = false;
 	int copp_perf_mode = 0;
+	bool is_copp_24bit = false;
 
 	pr_debug("%s: reg %x val %x set %x\n", __func__, reg, val, set);
 

@@ -613,3 +613,26 @@ void sde_get_edid(struct drm_connector *connector,
 
 	SDE_EDID_DEBUG("%s -\n", __func__);
 };
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+
+void _sde_edid_remove_hdr(struct drm_connector *connector)
+{
+	struct sde_connector *c_conn;
+	c_conn = to_sde_connector(connector);
+	SDE_EDID_DEBUG("%s +\n", __func__);
+	/* remove colorimetry */
+	c_conn->color_enc_fmt &= ~(DRM_EDID_CLRMETRY_BT2020_RGB |
+				DRM_EDID_CLRMETRY_BT2020_YCC |
+				DRM_EDID_CLRMETRY_BT2020_CYCC);
+	/* remove hdr_plus_info */
+	c_conn->hdr_plus_app_ver = 0;
+	/* remove eotf and supported */
+	c_conn->hdr_supported = false;
+	c_conn->hdr_eotf = 0;
+	c_conn->hdr_metadata_type_one = false;
+	c_conn->hdr_max_luminance = 0;
+	c_conn->hdr_avg_luminance = 0;
+	c_conn->hdr_min_luminance = 0;
+	SDE_EDID_DEBUG("%s -\n", __func__);
+}
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */

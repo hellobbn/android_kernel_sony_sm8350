@@ -1279,6 +1279,26 @@ static ssize_t dp_debug_read_info(struct file *file, char __user *user_buff,
 	if (dp_debug_check_buffer_overflow(rc, &max_size, &len))
 		goto error;
 
+	rc = snprintf(buf + len, max_size,
+		"\tdfp_type=%02x(%s) det_dfp_type=%02x(%s)\n",
+		      debug->panel->dfp_type,
+		      (debug->panel->dfp_type == DP_DWN_STRM_PORT_TYPE_DP)? "DP"
+		      : (debug->panel->dfp_type == DP_DWN_STRM_PORT_TYPE_TMDS)?
+		      "TMDS" : "NoInfo/Others",
+		      debug->panel->det_dfp_type,
+		      (debug->panel->det_dfp_type == DP_DS_PORT_TYPE_DP)? "DP"
+		      : (debug->panel->det_dfp_type == DP_DS_PORT_TYPE_HDMI)?
+					"HDMI" : "Other");
+	if (dp_debug_check_buffer_overflow(rc, &max_size, &len))
+		goto error;
+	rc = snprintf(buf + len, max_size,
+		      "\tmax_tmds=%02x, bpc=%02X, supp=%02X\n",
+		      debug->panel->det_dfp_max_tmds,
+		      debug->panel->det_dfp_max_bpc,
+		      debug->panel->det_dfp_supp);
+	if (dp_debug_check_buffer_overflow(rc, &max_size, &len))
+		goto error;
+
 #endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 	len = min_t(size_t, count, len);
 	if (copy_to_user(user_buff, buf, len))

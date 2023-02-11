@@ -137,6 +137,13 @@ struct dp_panel {
 	bool mst_state;
 
 	s64 fec_overhead_fp;
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	u32 dfp_type;
+	u32 det_dfp_type;
+	u32 det_dfp_max_tmds;
+	u32 det_dfp_max_bpc;
+	u32 det_dfp_supp;
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 	int (*init)(struct dp_panel *dp_panel);
 	int (*deinit)(struct dp_panel *dp_panel, u32 flags);

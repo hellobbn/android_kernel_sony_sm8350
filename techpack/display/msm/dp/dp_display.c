@@ -3011,15 +3011,18 @@ static enum drm_mode_status dp_validate_mode_ext(
 		if (mode->vrefresh % 30 == 0)
 			mode_status = MODE_OK;
 		break;
-	case 1: /* valid for up to FHD/multi of 60Hz and higher */
+	case 1: /* valid for high resolution 30Hz/60Hz */
 		mode->type &= ~DRM_MODE_TYPE_PREFERRED;
-		if (mode->hdisplay <= 1920 &&
-		    mode->vrefresh % 60 == 0 && mode->vrefresh >= 60)
+		if (mode->vrefresh == 30 ||
+		    mode->vrefresh == 60)
 			mode_status = MODE_OK;
 		break;
-	case 2: /* valid for any reso/60Hz only */
+	case 2: /* valid for 120Hz and 480p60Hz */
 		mode->type &= ~DRM_MODE_TYPE_PREFERRED;
-		if (mode->vrefresh == 60)
+		if ((mode->hdisplay <= 1920 &&
+		     mode->vrefresh == 120) ||
+		    (mode->vdisplay <= 480 &&
+		     mode->vrefresh == 60))
 			mode_status = MODE_OK;
 		break;
 	case 3: /* valid for up to FHD/60Hz only */
@@ -3028,19 +3031,20 @@ static enum drm_mode_status dp_validate_mode_ext(
 		    mode->vrefresh == 60)
 			mode_status = MODE_OK;
 		break;
-	case 4: /* valid for 24 Hz only (Test) */
+	case 4: /* valid for 24/25 Hz only (Test) */
 		mode->type &= ~DRM_MODE_TYPE_PREFERRED;
-		if (mode->vrefresh == 24)
+		if (mode->vrefresh == 24 ||
+		    mode->vrefresh == 25)
 			mode_status = MODE_OK;
 		break;
-	case 5: /* valid for 25 Hz only (Test) */
-		mode->type &= ~DRM_MODE_TYPE_PREFERRED;
-		if (mode->vrefresh == 25)
-			mode_status = MODE_OK;
-		break;
-	case 6: /* valid for 30 Hz only (Test) */
+	case 5: /* valid for 30 Hz only (Test) */
 		mode->type &= ~DRM_MODE_TYPE_PREFERRED;
 		if (mode->vrefresh == 30)
+			mode_status = MODE_OK;
+		break;
+	case 6: /* valid for 90 Hz only (Test) */
+		mode->type &= ~DRM_MODE_TYPE_PREFERRED;
+		if (mode->vrefresh == 90)
 			mode_status = MODE_OK;
 		break;
 	case 7: /* valid for 144 Hz only (Test) */

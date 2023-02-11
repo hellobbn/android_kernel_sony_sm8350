@@ -2448,12 +2448,6 @@ static int __cam_isp_ctx_epoch_in_applied(struct cam_isp_context *ctx_isp,
 	CAM_DBG(CAM_REQ, "move request %lld to active list(cnt = %d), ctx %u",
 		req->request_id, ctx_isp->active_req_cnt, ctx->ctx_id);
 
-	if (req->request_id > ctx_isp->reported_req_id) {
-		request_id = req->request_id;
-		ctx_isp->reported_req_id = request_id;
-	}
-	__cam_isp_ctx_send_sof_timestamp(ctx_isp, request_id,
-		CAM_REQ_MGR_SOF_EVENT_ERROR);
 	/*
 	 * Update the record before req pointer to
 	 * other invalid req.
@@ -3536,7 +3530,6 @@ static int __cam_isp_ctx_apply_req_in_activated_state(
 	 * The maximum number of request allowed to be outstanding is 2.
 	 *
 	 */
-	ctx_isp = (struct cam_isp_context *) ctx->ctx_priv;
 /* sony extension begin */
 	if (ctx_isp->hw_config_applied) {
 		CAM_ERR(CAM_ISP, "Waiting reg_update for applied request %lld, %d",
@@ -4839,7 +4832,7 @@ static struct cam_isp_ctx_irq_ops
 #if 1
 			__cam_isp_ctx_rdi_only_reg_upd_in_bubble_applied_state,
 #else
-			NULL,
+			__cam_isp_ctx_rdi_only_reg_upd_in_applied_state,
 #endif
 /* sony extension end */
 			NULL,

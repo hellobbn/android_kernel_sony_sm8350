@@ -1594,7 +1594,27 @@ skip_dpcd_read:
 			rc = -EINVAL;
 			goto end;
 		}
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+		/* DPCD 0x05 [b2:b1] DFP_TYPE, [b0] DFP_PRESENT */
+		dp_panel->dfp_type = dpcd[DP_DOWNSTREAMPORT_PRESENT] &
+					DP_DWN_STRM_PORT_TYPE_MASK;
+		/* DPCD 0x80 DETAIL_CAP_INFO */
+		if (dpcd[DP_DOWNSTREAMPORT_PRESENT] &
+			DP_DETAILED_CAP_INFO_AVAILABLE) {
+			dp_panel->det_dfp_type = dp_panel->ds_ports[0] &
+				DP_DS_PORT_TYPE_MASK;
+			dp_panel->det_dfp_max_tmds = dp_panel->ds_ports[1];
+			dp_panel->det_dfp_max_bpc = dp_panel->ds_ports[2];
+			dp_panel->det_dfp_supp = dp_panel->ds_ports[3];
+		}
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 	}
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	else
+		dp_panel->dfp_type = DP_DWN_STRM_PORT_TYPE_DP;
+
+	DP_INFO("dfp_type (%02x)\n", dp_panel->dfp_type);
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 	if (dfp_count > DP_MAX_DS_PORT_COUNT)
 		DP_DEBUG("DS port count %d greater that max (%d) supported\n",
@@ -1878,6 +1898,35 @@ end:
 	return rc;
 }
 
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+static u32 dp_panel_get_supported_bpp_dfp_hdmi(struct dp_panel *dp_panel,
+					u32 bpp, u32 mode_pclk_khz)
+{
+	u32 hdmi_bpp, hdmi_max_bpc;
+
+	if (dp_panel->dfp_type != DP_DWN_STRM_PORT_TYPE_TMDS ||
+	    dp_panel->det_dfp_type != DP_DS_PORT_TYPE_HDMI)
+		return bpp;
+
+
+	if (dp_panel->det_dfp_max_bpc >= DP_DS_10BPC &&
+	    (((u64)mode_pclk_khz * 125 / 100) <=
+	     (u64)dp_panel->det_dfp_max_tmds * 2500)) {
+		hdmi_max_bpc = 30;
+	}
+	else {
+		hdmi_max_bpc = 24;
+	}
+
+	hdmi_bpp = min_t(u32, bpp, hdmi_max_bpc);
+	DP_DEBUG("hdmi_bpp=%d, bpp=%d, mode_pclk_khz=%d, hdmi_max_tmds=%lu\n",
+		 hdmi_bpp, bpp, mode_pclk_khz,
+		 (u64)dp_panel->det_dfp_max_tmds * 2500);
+
+	return hdmi_bpp;
+}
+
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 static u32 dp_panel_get_supported_bpp(struct dp_panel *dp_panel,
 		u32 mode_edid_bpp, u32 mode_pclk_khz)
 {
@@ -1893,6 +1942,10 @@ static u32 dp_panel_get_supported_bpp(struct dp_panel *dp_panel,
 		min_supported_bpp = 24;
 
 	bpp = min_t(u32, mode_edid_bpp, max_supported_bpp);
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	/* re-evaluate bpp for DFP_HDMI */
+	bpp = dp_panel_get_supported_bpp_dfp_hdmi(dp_panel, bpp, mode_pclk_khz);
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 	link_params = &panel->link->link_params;
 
@@ -2011,7 +2064,15 @@ static int dp_panel_get_modes(struct dp_panel *dp_panel,
 		dp_panel_set_test_mode(panel, mode);
 		return 1;
 	} else if (dp_panel->edid_ctrl->edid) {
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+		int ret;
+		ret = _sde_edid_update_modes(connector, dp_panel->edid_ctrl);
+		if (dp_panel->dfp_type != DP_DWN_STRM_PORT_TYPE_DP)
+			_sde_edid_remove_hdr(dp_panel->connector);
+		return ret;
+#else
 		return _sde_edid_update_modes(connector, dp_panel->edid_ctrl);
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 	}
 
 	/* fail-safe mode */
@@ -2385,6 +2446,13 @@ static int dp_panel_deinit_panel_info(struct dp_panel *dp_panel, u32 flags)
 
 	dp_panel->link_bw_code = 0;
 	dp_panel->lane_count = 0;
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+	dp_panel->dfp_type = 0;
+	dp_panel->det_dfp_type = 0;
+	dp_panel->det_dfp_max_tmds = 0;
+	dp_panel->det_dfp_max_bpc = 0;
+	dp_panel->det_dfp_supp = 0;
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 
 	return rc;
 }

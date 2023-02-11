@@ -1117,6 +1117,15 @@ static int battery_psy_get_prop(struct power_supply *psy,
 	if (prop == POWER_SUPPLY_PROP_TIME_TO_FULL_NOW)
 		prop = POWER_SUPPLY_PROP_TIME_TO_FULL_AVG;
 
+	if (prop == POWER_SUPPLY_PROP_TIME_TO_FULL_AVG) {
+		/*
+		 * we don't really support time to full estimation
+		 * on this platform
+		 */
+		pval->intval = -1;
+		return 0;
+	}
+
 	prop_id = get_property_id(pst, prop);
 	if (prop_id < 0)
 		return prop_id;

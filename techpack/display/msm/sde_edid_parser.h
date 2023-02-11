@@ -165,5 +165,14 @@ u8 sde_get_edid_checksum(void *input);
 int _sde_edid_update_modes(struct drm_connector *connector,
 							void *edid_ctrl);
 
+#ifdef CONFIG_DRM_SDE_SPECIFIC_PANEL
+/**
+ * _sde_edid_remove_hdr() - remove hdr capability.
+ *
+ * Return: void.
+ */
+void _sde_edid_remove_hdr(struct drm_connector *connector);
+
+#endif /* CONFIG_DRM_SDE_SPECIFIC_PANEL */
 #endif /* _SDE_EDID_PARSER_H_ */
 
